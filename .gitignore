@@ -36,3 +36,4 @@ build/
 
 ### confidential properties ###
 !/src/main/resources/config.properties
+/.mvn/wrapper/maven-wrapper.jar
