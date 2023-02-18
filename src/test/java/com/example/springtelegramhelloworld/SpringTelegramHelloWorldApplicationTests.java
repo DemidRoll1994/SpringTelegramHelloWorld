@@ -1,4 +1,4 @@
-package com.example.springtelegramhelloworld;
+package com.example.SpringTelegramHelloWorld;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

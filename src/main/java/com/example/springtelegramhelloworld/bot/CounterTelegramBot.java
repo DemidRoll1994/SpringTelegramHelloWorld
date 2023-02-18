@@ -17,8 +17,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @Slf4j
 @Component
 public class CounterTelegramBot extends TelegramLongPollingBot implements BotCommands {
-    @Autowired
-    private UserRepository userRepository;
+/*    @Autowired
+    private UserRepository userRepository;*/
 
     final BotConfig config;
 
@@ -34,6 +34,11 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
     @Override
     public String getBotUsername() {
         return config.getBotName();
+    }
+
+    @Override
+    public String getBotToken() {
+        return config.getToken();
     }
 
     @Override
@@ -67,14 +72,15 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
     }
 
     private void botAnswerUtils(String receivedMessage, long chatId, String userName) {
-
-        //System.out.println(chatId);
         switch (receivedMessage){
             case "/start":
                 startBot(chatId, userName);
                 break;
             case "/help":
                 sendHelpText(chatId, HELP_TEXT);
+                break;
+            case "/whether":
+                sendWeather(chatId, "Minsk");
                 break;
             default: break;
         }
@@ -105,6 +111,9 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
         } catch (TelegramApiException e){
             log.error(e.getMessage());
         }
+    }
+    private void sendWeather(long chatId, String city){
+        new WeatherRepo().getWeather();
     }
 
 /*
