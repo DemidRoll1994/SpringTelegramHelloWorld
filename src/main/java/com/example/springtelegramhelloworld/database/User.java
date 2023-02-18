@@ -1,4 +1,4 @@
-package com.example.SpringTelegramHelloWorld.database;
+package com.example.springtelegramhelloworld.database;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

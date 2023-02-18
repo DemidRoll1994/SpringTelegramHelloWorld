@@ -1,6 +1,6 @@
-package com.example.SpringTelegramHelloWorld.config;
+package com.example.springtelegramhelloworld.config;
 
-import com.example.SpringTelegramHelloWorld.bot.CounterTelegramBot;
+import com.example.springtelegramhelloworld.bot.CounterTelegramBot;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;

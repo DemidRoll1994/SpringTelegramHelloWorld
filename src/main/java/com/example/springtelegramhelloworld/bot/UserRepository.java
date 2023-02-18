@@ -1,6 +1,6 @@
-package com.example.SpringTelegramHelloWorld.bot;
+package com.example.springtelegramhelloworld.bot;
 
-import com.example.SpringTelegramHelloWorld.database.User;
+import com.example.springtelegramhelloworld.database.User;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

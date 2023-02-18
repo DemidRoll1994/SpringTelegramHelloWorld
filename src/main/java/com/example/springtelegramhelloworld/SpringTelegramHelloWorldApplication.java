@@ -1,4 +1,4 @@
-package com.example.SpringTelegramHelloWorld;
+package com.example.springtelegramhelloworld;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;

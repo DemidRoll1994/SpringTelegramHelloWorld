@@ -1,8 +1,8 @@
-package com.example.SpringTelegramHelloWorld.bot;
+package com.example.springtelegramhelloworld.bot;
 
-import com.example.SpringTelegramHelloWorld.components.BotCommands;
-import com.example.SpringTelegramHelloWorld.components.Buttons;
-import com.example.SpringTelegramHelloWorld.config.BotConfig;
+import com.example.springtelegramhelloworld.components.BotCommands;
+import com.example.springtelegramhelloworld.components.Buttons;
+import com.example.springtelegramhelloworld.config.BotConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
