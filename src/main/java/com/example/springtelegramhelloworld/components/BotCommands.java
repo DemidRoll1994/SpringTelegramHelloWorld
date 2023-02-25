@@ -8,7 +8,7 @@ public interface BotCommands {
     List<BotCommand> LIST_OF_COMMANDS = List.of(
             new BotCommand("/start", "start bot"),
             new BotCommand("/help", "bot info"),
-            new BotCommand("/whether", "get minsk weather")
+            new BotCommand("/weather", "get minsk weather")
     );
 
     String HELP_TEXT = "This bot is under construction. In future it will provide " +

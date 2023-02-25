@@ -3,8 +3,9 @@ package com.example.springtelegramhelloworld.bot;
 import com.example.springtelegramhelloworld.components.BotCommands;
 import com.example.springtelegramhelloworld.components.Buttons;
 import com.example.springtelegramhelloworld.config.BotConfig;
+import com.example.springtelegramhelloworld.repository.WeatherRepo;
+import com.example.springtelegramhelloworld.view.WeatherView;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -19,8 +20,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class CounterTelegramBot extends TelegramLongPollingBot implements BotCommands {
 /*    @Autowired
     private UserRepository userRepository;*/
-
     final BotConfig config;
+    private WeatherRepo weatherRepo = new WeatherRepo(); //TODO REMOVE NEW
+    private WeatherView weatherView = new WeatherView(); //TODO REMOVE NEW
 
     public CounterTelegramBot(BotConfig config) {
         this.config = config;
@@ -79,7 +81,7 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
             case "/help":
                 sendHelpText(chatId, HELP_TEXT);
                 break;
-            case "/whether":
+            case "/weather":
                 sendWeather(chatId, "Minsk");
                 break;
             default: break;
@@ -113,7 +115,12 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
         }
     }
     private void sendWeather(long chatId, String city){
-        new WeatherRepo().getWeather();
+        try {
+            execute(weatherView.prepareAnswer(chatId, weatherRepo.getWeather()));
+            log.info("Reply sent");
+        } catch (TelegramApiException e){
+            log.error(e.getMessage());
+        }
     }
 
 /*
