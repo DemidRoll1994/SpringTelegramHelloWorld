@@ -8,8 +8,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Component
 public class WeatherView {
-    private final String WEATHER_FORMAT = "current weather in %s %sTemp: %d "+
-            "Wind: %d %dkmh pressure: %d Precipitation amount %dmm humidity %d%Cloud cover %d";/*"current weather in %s, %s,\n Temp: %d" +
+    private final String WEATHER_FORMAT = "Current weather in %s %s \nTemp: %.1f \nWind: %s %.1f kmh \nPressure: %.1f \nPrecipitation amount %.1fmm \nHumidity %d \nCloud cover %d";/*"current weather in %s, %s,\n Temp: %d" +
             ",\nWind: %d, %dkmh, ,\npressure: %d ,\nPrecipitation amount %dmm,\n" +
             "humidity %d%,\nCloud cover %d%."*/; //todo
 
