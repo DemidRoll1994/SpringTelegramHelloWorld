@@ -14,6 +14,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import static com.example.springtelegramhelloworld.components.Commands.*;
+
 
 @Slf4j
 @Component
@@ -92,8 +94,7 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText("Hi, " + userName + "! I'm a Telegram bot.'");
-        message.setReplyMarkup(Buttons.inlineMarkup());
-
+        message.setReplyMarkup(Buttons.mainMenuButtons());
         try {
             execute(message);
             log.info("Reply sent");

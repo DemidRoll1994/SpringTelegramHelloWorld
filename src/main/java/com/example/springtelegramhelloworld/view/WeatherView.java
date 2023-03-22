@@ -4,7 +4,6 @@ import com.example.springtelegramhelloworld.components.Buttons;
 import com.example.springtelegramhelloworld.database.CurrentWeather;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Component
 public class WeatherView {
@@ -26,7 +25,7 @@ public class WeatherView {
                 , currentWeather.getCurrent().getPrecip_mm()
                 , currentWeather.getCurrent().getHumidity()
                 , currentWeather.getCurrent().getCloud()));
-        message.setReplyMarkup(Buttons.inlineMarkup());
+        message.setReplyMarkup(Buttons.mainMenuButtons());
 
 
         return message;
