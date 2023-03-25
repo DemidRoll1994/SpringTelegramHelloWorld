@@ -1,6 +1,6 @@
 package com.example.springtelegramhelloworld.repository;
 
-import com.example.springtelegramhelloworld.database.CurrentWeather;
+import com.example.springtelegramhelloworld.service.CurrentWeather;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

@@ -1,36 +1,47 @@
 package com.example.springtelegramhelloworld.bot;
 
-import com.example.springtelegramhelloworld.components.BotCommands;
-import com.example.springtelegramhelloworld.components.Buttons;
+import com.example.springtelegramhelloworld.components.*;
 import com.example.springtelegramhelloworld.config.BotConfig;
+import com.example.springtelegramhelloworld.database.HibernateUtil;
+import com.example.springtelegramhelloworld.database.User;
 import com.example.springtelegramhelloworld.repository.WeatherRepo;
 import com.example.springtelegramhelloworld.view.WeatherView;
+import com.fasterxml.classmate.AnnotationConfiguration;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import static com.example.springtelegramhelloworld.components.Commands.*;
+import org.hibernate.cfg.AnnotationConfiguration;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 
 @Slf4j
 @Component
 public class CounterTelegramBot extends TelegramLongPollingBot implements BotCommands {
-/*    @Autowired
-    private UserRepository userRepository;*/
+    /*    @Autowired
+        private UserRepository userRepository;*/
     final BotConfig config;
     private WeatherRepo weatherRepo = new WeatherRepo(); //TODO REMOVE NEW
     private WeatherView weatherView = new WeatherView(); //TODO REMOVE NEW
+
+    ResourceBundle localMessageBundle = ResourceBundle.getBundle("language.messages", Locale.forLanguageTag("EN"));
 
     public CounterTelegramBot(BotConfig config) {
         this.config = config;
         try {
             this.execute(new SetMyCommands(LIST_OF_COMMANDS, new BotCommandScopeDefault(), null));
-        } catch (TelegramApiException e){
+        } catch (TelegramApiException e) {
             log.error(e.getMessage());
         }
     }
@@ -51,8 +62,7 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
         long userId = 0;
         String userName = null;
         String receivedMessage;
-
-        if(update.hasMessage()) {
+        if (update.hasMessage()) {
             chatId = update.getMessage().getChatId();
             userId = update.getMessage().getFrom().getId();
             userName = update.getMessage().getFrom().getFirstName();
@@ -76,50 +86,106 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
     }
 
     private void botAnswerUtils(String receivedMessage, long chatId, String userName) {
-        switch (receivedMessage){
+        /*Command command = Command.valueOf(receivedMessage); // можно сломать, если передать не тот аргумент, например "/generateErrorRandomTag111111" TODO
+        CommandFactory factory = new CommandFactory();
+        factory.executeCommand(command);*/
+
+        switch (receivedMessage) {
             case "/start":
                 startBot(chatId, userName);
                 break;
             case "/help":
-                sendHelpText(chatId, HELP_TEXT);
+                sendHelpText(chatId, localMessageBundle.getString("help.text"));
                 break;
             case "/weather":
                 sendWeather(chatId, "Minsk");
                 break;
-            default: break;
+            case "/language":
+                saveLanguageToDatabase(1l,"");
+                break;
+            default:
+                break;
         }
     }
 
     private void startBot(long chatId, String userName) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText("Hi, " + userName + "! I'm a Telegram bot.'");
+        message.setText(String.format("Hi, %s! I'm a Telegram bot.'", userName));
         message.setReplyMarkup(Buttons.mainMenuButtons());
+
+
         try {
+            message.getChatId();
             execute(message);
-            log.info("Reply sent");
-        } catch (TelegramApiException e){
+            log.info("Start Reply sent");
+        } catch (TelegramApiException e) {
             log.error(e.getMessage());
         }
     }
 
-    private void sendHelpText(long chatId, String textToSend){
+    private void sendHelpText(long chatId, String textToSend) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(textToSend);
 
         try {
             execute(message);
-            log.info("Reply sent");
-        } catch (TelegramApiException e){
+            log.info("Help Reply sent");
+        } catch (TelegramApiException e) {
             log.error(e.getMessage());
         }
     }
-    private void sendWeather(long chatId, String city){
+
+    private void saveLanguageToDatabase(long chatId, String textToSend) {
+
+        SessionFactory factory;
+        try {
+            factory = new AnnotationConfiguration().
+                    configure().addAnnotatedClass(User.class).
+                    buildSessionFactory();
+        } catch (Throwable ex) {
+            System.err.println("Failed to create sessionFactory object." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+
+
+
+
+
+        /*Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            User user = session.get(User.class, chatId);
+            user.setLanguage(Language.RU.getValue());
+            // start a transaction
+            transaction = session.beginTransaction();
+            // save the student objects
+            session.save(user);
+            // commit transaction
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+/*
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            List < Student > students = session.createQuery("from Student", Student.class).list();
+            students.forEach(s - > System.out.println(s.getFirstName()));
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }*/
+    }
+
+    private void sendWeather(long chatId, String city) {
         try {
             execute(weatherView.prepareAnswer(chatId, weatherRepo.getWeather()));
-            log.info("Reply sent");
-        } catch (TelegramApiException e){
+            log.info("Weather Reply sent");
+        } catch (TelegramApiException e) {
             log.error(e.getMessage());
         }
     }

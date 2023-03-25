@@ -1,19 +1,17 @@
 package com.example.springtelegramhelloworld.components;
 
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+public enum Command {
+    START("/start", "Start.textOnButton", "Start.descriptionForHelp"),
+    HELP("/help", "Help.textOnButton", "Help.descriptionForHelp"),
+    WEATHER("/weather", "Weather.textOnButton", "Weather.descriptionForHelp"),
+    LANGUAGE ("/changeLanguage", "ChangeLanguage.textOnButton","ChangeLanguage.descriptionForHelp");
 
-import java.util.List;
-
-public enum Commands {
-    START("/start", "Start", "Start bot"),
-    HELP("/help", "Help", "Bot info"),
-    WEATHER("/weather", "Weather", "get minsk weather");
 
     private String incomeCommand;
     private String textOnButton;
     private String descriptionForHelp;
 
-    Commands(String incomeCommand, String textOnButton, String descriptionForHelp) {
+    Command(String incomeCommand, String textOnButton, String descriptionForHelp) {
         this.incomeCommand = incomeCommand;
         this.textOnButton = textOnButton;
         this.descriptionForHelp = descriptionForHelp;
@@ -27,14 +25,14 @@ public enum Commands {
     }
 
     /**
-     * @return textOnButton
+     * @return ref to textOnButton
      */
     public String getText() {
         return textOnButton;
     }
 
     /**
-     * @return descriptionForHelp
+     * @return ref to descriptionForHelp
      */
     public String getDescription() {
         return descriptionForHelp;

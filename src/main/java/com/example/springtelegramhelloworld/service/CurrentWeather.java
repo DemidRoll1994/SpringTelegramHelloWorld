@@ -1,4 +1,4 @@
-package com.example.springtelegramhelloworld.database;
+package com.example.springtelegramhelloworld.service;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

@@ -8,23 +8,22 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class StartAnswer implements Answer {
 
     @Override
-    public SendMessage prepareMessage(Message request) {
+    public SendMessage prepareMessage(Message request ) {
 
 
         SendMessage response = new SendMessage();
-/*
-        if (message != null) {
+        request.getChat().setDescription("ru");
 
-        response.setChatId(message.getChatId());
-        response.setText("Hi, " + message.getFrom().getFirstName() + "! I'm a Telegram bot.");
 
-            if (update.getMessage().hasText()) {
-                receivedMessage = message.getText();
-                botAnswerUtils(receivedMessage, chatId, userName);
-            }
+
+        if (request != null) {
+
+        response.setChatId(request.getChatId());
+        response.setText( request.getFrom().getFirstName());
+
         }
 
-*/
+
 
 
 

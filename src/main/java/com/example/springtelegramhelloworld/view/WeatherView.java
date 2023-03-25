@@ -1,7 +1,7 @@
 package com.example.springtelegramhelloworld.view;
 
 import com.example.springtelegramhelloworld.components.Buttons;
-import com.example.springtelegramhelloworld.database.CurrentWeather;
+import com.example.springtelegramhelloworld.service.CurrentWeather;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
