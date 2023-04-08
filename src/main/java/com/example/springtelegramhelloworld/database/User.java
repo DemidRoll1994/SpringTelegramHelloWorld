@@ -1,5 +1,6 @@
 package com.example.springtelegramhelloworld.database;
 
+import com.example.springtelegramhelloworld.components.Language;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,10 +27,8 @@ public class User {
 public class User implements Serializable {
 
     @Id
-    @GeneratedValue
     private Long userId;
-    private String language;
-
+    private Language language;
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
@@ -38,6 +37,11 @@ public class User implements Serializable {
             inverseJoinColumns = { @JoinColumn(name = "weatherCity_id") }
     )
     Set<WeatherCity> weatherCities = new HashSet<>();
+
+
+    public User() {
+
+    }
 
 
 }

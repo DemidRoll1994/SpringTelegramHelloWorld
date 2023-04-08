@@ -4,8 +4,10 @@ public enum Command {
     START("/start", "Start.textOnButton", "Start.descriptionForHelp"),
     HELP("/help", "Help.textOnButton", "Help.descriptionForHelp"),
     WEATHER("/weather", "Weather.textOnButton", "Weather.descriptionForHelp"),
-    LANGUAGE ("/changeLanguage", "ChangeLanguage.textOnButton","ChangeLanguage.descriptionForHelp");
+    LANGUAGE ("/changeLanguage", "ChangeLanguage.textOnButton","ChangeLanguage.descriptionForHelp"),
+    CHANGE_LANGUAGE_TO_RU ("/changeLanguageToRU", "ChangeLanguage.textOnButton" , "ChangeLanguage.descriptionForHelp"),
 
+    CHANGE_LANGUAGE_TO_EN ("/changeLanguageToEN", "ChangeLanguage.textOnButton" , "ChangeLanguage.descriptionForHelp");
 
     private String incomeCommand;
     private String textOnButton;
