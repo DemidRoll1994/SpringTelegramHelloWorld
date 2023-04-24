@@ -1,15 +1,16 @@
-package com.example.springtelegramhelloworld.bot;
+package com.example.springtelegramhelloworld.front.bot;
 
-import com.example.springtelegramhelloworld.components.BotCommands;
-import com.example.springtelegramhelloworld.components.Buttons;
-import com.example.springtelegramhelloworld.components.Language;
-import com.example.springtelegramhelloworld.config.BotConfig;
-import com.example.springtelegramhelloworld.database.User;
-import com.example.springtelegramhelloworld.database.UserRepository;
-import com.example.springtelegramhelloworld.repository.WeatherRepo;
-import com.example.springtelegramhelloworld.view.WeatherView;
+import com.example.springtelegramhelloworld.front.components.BotCommands;
+import com.example.springtelegramhelloworld.front.components.Buttons;
+import com.example.springtelegramhelloworld.front.components.Language;
+import com.example.springtelegramhelloworld.front.config.BotConfig;
+import com.example.springtelegramhelloworld.back.database.User;
+import com.example.springtelegramhelloworld.back.database.UserRepository;
+import com.example.springtelegramhelloworld.back.repository.WeatherRepo;
+import com.example.springtelegramhelloworld.front.view.WeatherView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -53,63 +54,69 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
     @Override
     public void onUpdateReceived(Update update) {
         long chatId = 0;
-        long userId = 0;
+        //long userId = 0;
         String userName = null;
         String receivedMessage;
+        User user = null;
 
         if (update.hasMessage()) {
+            //userId = update.getMessage().getFrom().getId(); //in private chats userId=chatId
             chatId = update.getMessage().getChatId();
-            userId = update.getMessage().getFrom().getId();
+            if (userRepository.findById(chatId).isEmpty()) {
+                startBot(chatId, userName);
+            }
+            user = userRepository.findById(chatId).get();
             userName = update.getMessage().getFrom().getFirstName();
-
             if (update.getMessage().hasText()) {
                 receivedMessage = update.getMessage().getText();
-                botAnswerUtils(receivedMessage, chatId, userName);
+                botAnswerUtils(receivedMessage, user, userName);
             }
         } else if (update.hasCallbackQuery()) {
             chatId = update.getCallbackQuery().getMessage().getChatId();
-            userId = update.getCallbackQuery().getFrom().getId();
+            //userId = update.getCallbackQuery().getFrom().getId();
+            if (userRepository.findById(chatId).isEmpty()) {
+                startBot(chatId, userName);
+            }
+            user = userRepository.findById(chatId).get();
             userName = update.getCallbackQuery().getFrom().getFirstName();
             receivedMessage = update.getCallbackQuery().getData();
-
-            botAnswerUtils(receivedMessage, chatId, userName);
+            botAnswerUtils(receivedMessage, user, userName);
         }
-
         /*if(chatId == Long.valueOf(config.getChatId())){
             updateDB(userId, userName);
         }*/
     }
 
-    private void botAnswerUtils(String receivedMessage, long chatId, String userName) {
+    private void botAnswerUtils(String receivedMessage, User user, String userName) {
         switch (receivedMessage) {
             case "/start":
-                startBot(chatId, userName);
+                startBot(user.getUserId(), userName);
                 break;
             case "/help":
-                sendHelpText(chatId, HELP_TEXT);
+                sendHelpText(user);
                 break;
             case "/weather":
-                sendWeather(chatId, "Minsk");
+                sendWeather(user, "Minsk");
                 break;
             case "/changeLanguage":
-                selectLanguage(chatId);
+                selectLanguage(user);
                 break;
             case "/changeLanguageToRU":
-                changeLanguage(chatId, Language.RU);
+                changeLanguage(user, Language.RU);
                 break;
             case "/changeLanguageToEN":
-                changeLanguage(chatId, Language.EN);
+                changeLanguage(user, Language.EN);
                 break;
             default:
                 break;
         }
     }
 
-    private void selectLanguage(long chatId) {
+    private void selectLanguage(User user) {
         SendMessage message = new SendMessage();
-        message.setChatId(chatId);
+        message.setChatId(user.getUserId());
         message.setText("select Language:");
-        message.setReplyMarkup(Buttons.selectLanguageButtons());
+        message.setReplyMarkup(Buttons.selectLanguageButtons(user.getLanguage()));
         try {
             execute(message);
             log.info("Reply sent");
@@ -118,21 +125,16 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
         }
     }
 
-    private void changeLanguage(long chatId, Language language) {
+    private void changeLanguage(User user, Language newLanguage) {
         SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText("English selected");
-        message.setReplyMarkup(Buttons.mainMenuButtons());
+        message.setChatId(user.getUserId());
+        message.setText(newLanguage.getValue() + " selected");
+        message.setReplyMarkup(Buttons.mainMenuButtons(user.getLanguage()));
         try {
-            Optional<User> user = userRepository.findById(chatId);
-            if (user.isPresent()) {
-                user.get().setLanguage(language);
-                userRepository.save(user.get());
-            } else {
-                //todo user = Optional.of(new User(chatId, Language.EN, new HashSet<>()));
-            }
+            user.setLanguage(newLanguage);
+            userRepository.save(user);
             execute(message);
-            log.info(String.format("user %d change language to %s",chatId,language.getValue()));
+            log.info(String.format("user %d change language to %s", user.getUserId(), newLanguage.getValue()));
         } catch (TelegramApiException e) {
             log.error(e.getMessage());
         }
@@ -142,7 +144,7 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText("Hi, " + userName + "! I'm a Telegram bot.'");
-        message.setReplyMarkup(Buttons.mainMenuButtons());
+        message.setReplyMarkup(Buttons.mainMenuButtons(Language.EN));
         try {
             Optional<User> user = userRepository.findById(chatId);
             if (user.isEmpty()) {
@@ -155,11 +157,10 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
         }
     }
 
-    private void sendHelpText(long chatId, String textToSend) {
+    private void sendHelpText(User user) {
         SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText(textToSend);
-
+        message.setChatId(user.getUserId());
+        message.setText(HELP_TEXT); //todo i18n
         try {
             execute(message);
             log.info("Reply sent");
@@ -168,9 +169,9 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
         }
     }
 
-    private void sendWeather(long chatId, String city) {
+    private void sendWeather(User user, String city) {
         try {
-            execute(weatherView.prepareAnswer(chatId, weatherRepo.getWeather()));
+            execute(weatherView.prepareAnswer(user, weatherRepo.getWeather(city)));
             log.info("Reply sent");
         } catch (TelegramApiException e) {
             log.error(e.getMessage());

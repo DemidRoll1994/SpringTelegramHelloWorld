@@ -1,4 +1,4 @@
-package com.example.springtelegramhelloworld.components;
+package com.example.springtelegramhelloworld.front.components;
 
 public enum Command {
     START("/start", "Start.textOnButton", "Start.descriptionForHelp"),

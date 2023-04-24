@@ -1,4 +1,4 @@
-package com.example.springtelegramhelloworld.config;
+package com.example.springtelegramhelloworld.front.config;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;

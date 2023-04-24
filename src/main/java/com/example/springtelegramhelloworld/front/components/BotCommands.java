@@ -1,4 +1,4 @@
-package com.example.springtelegramhelloworld.components;
+package com.example.springtelegramhelloworld.front.components;
 
 import org.springframework.context.annotation.PropertySource;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
@@ -15,11 +15,8 @@ public interface BotCommands {
             new BotCommand("/changeLanguage", "Change Language")
     );
 
-     String HELP_TEXT = ResourceBundle.getBundle("language\\messages", Locale.forLanguageTag("RU")).getString("help.text");
-     /*String HELP_TEXT =
-            "This bot is under construction. In future it will provide " +
-                    "The following commands are available to you:\n\n" +
-                    "/start - start the bot\n" +
-                    "/help - help menu";*/
+    ResourceBundle bundle = ResourceBundle.getBundle("language\\messages", Locale.forLanguageTag("RU"));
+    String HELP_TEXT = bundle.getString("help.text");
+
 
 }

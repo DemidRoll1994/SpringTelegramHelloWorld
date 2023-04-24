@@ -1,4 +1,4 @@
-package com.example.springtelegramhelloworld.components;
+package com.example.springtelegramhelloworld.front.components;
 
 public class CommandFactory {
 

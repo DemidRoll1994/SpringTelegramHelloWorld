@@ -1,10 +1,9 @@
-package com.example.springtelegramhelloworld.database;
+package com.example.springtelegramhelloworld.back.database;
 
-import com.example.springtelegramhelloworld.components.Language;
+import com.example.springtelegramhelloworld.front.components.Language;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
 import java.util.HashSet;
