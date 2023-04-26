@@ -1,6 +1,6 @@
-package com.example.springtelegramhelloworld.repository;
+package com.example.springtelegramhelloworld.back.repository;
 
-import com.example.springtelegramhelloworld.database.CurrentWeather;
+import com.example.springtelegramhelloworld.back.service.CurrentWeather;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class WeatherRepo {
 
-    public CurrentWeather getWeather() {
+    public CurrentWeather getWeather(String city) {
         final RestTemplate restTemplate = new RestTemplate();
 /*
         final String stringPosts = restTemplate.getForObject("http://api.weatherapi.com/v1/current.json?key=49f9135833b8489f91f93414231802&q=minsk&aqi=no", String.class);
