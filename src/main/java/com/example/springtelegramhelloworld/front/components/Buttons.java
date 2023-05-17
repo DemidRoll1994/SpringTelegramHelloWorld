@@ -1,6 +1,7 @@
 package com.example.springtelegramhelloworld.front.components;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -10,6 +11,7 @@ import java.util.ResourceBundle;
 
 import static com.example.springtelegramhelloworld.front.components.Command.*;
 
+@Slf4j
 public class Buttons {
     private static final InlineKeyboardButton START_BUTTON = new InlineKeyboardButton(START.getText());
     private static final InlineKeyboardButton HELP_BUTTON = new InlineKeyboardButton(Command.HELP.getText());
@@ -54,7 +56,10 @@ public class Buttons {
     private static InlineKeyboardButton getButton(Command command, Language language) {
         ResourceBundle bundle = ResourceBundle.getBundle("language\\messages"
                 , Locale.forLanguageTag(language.getValue()));
+        log.info("generate button with lang: "+ language.getValue());
         InlineKeyboardButton button = new InlineKeyboardButton(bundle.getString(command.getText()));
+
+        log.info("generate button with text: "+ bundle.getString(command.getText()));
         button.setCallbackData(command.getIncomeCommand());
         return button;
     }
