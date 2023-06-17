@@ -29,6 +29,8 @@ public class User implements Serializable {
     private Long userId;
     private Language language;
 
+
+
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "user_weatherCity",
@@ -38,10 +40,21 @@ public class User implements Serializable {
     Set<WeatherCity> weatherCities = new HashSet<>();
 
 
+    @OneToMany(mappedBy="exercise")
+    private Set<Exercise> exercises;
+
+    @OneToMany(mappedBy="training")
+    private Set<Training> trainings;
+
     public User() {
 
     }
 
 
+    public User(long userId, Language language) {
+        this();
+        this.userId=userId;
+        this.language=language;
+    }
 }
 

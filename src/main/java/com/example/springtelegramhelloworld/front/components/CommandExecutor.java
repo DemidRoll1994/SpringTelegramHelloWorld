@@ -122,7 +122,7 @@ public class CommandExecutor {
     private User createUser(long chatId) {
         Optional<User> user = userRepository.findById(chatId);
         if (user.isEmpty()) {
-            userRepository.save(new User(chatId, Language.EN, new HashSet<>()));
+            userRepository.save(new User(chatId, Language.EN));
             user = userRepository.findById(chatId);
         }
         return user.get();

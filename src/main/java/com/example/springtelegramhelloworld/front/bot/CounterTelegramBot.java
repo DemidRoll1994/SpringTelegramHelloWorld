@@ -35,6 +35,7 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
 
     @Autowired
     private CommandExecutor commandExecutor;
+
     public CounterTelegramBot(BotConfig config) {
         this.config = config;
         try {
@@ -134,6 +135,7 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
         switch (receivedMessage) {
             case "/start":
                 command = Command.START;
+                if (user == null) {user = new User();}
                 break;
             case "/help":
                 command = Command.HELP;
@@ -154,7 +156,7 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
                 break;
         }
         try {
-            execute(commandExecutor.executeCommand(command, new User(), update));
+            execute(commandExecutor.executeCommand(command, user, update));
             log.info("Reply sent");
         } catch (TelegramApiException e) {
             log.error(e.getMessage());
@@ -223,7 +225,7 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
         try {
             Optional<User> user = userRepository.findById(chatId);
             if (user.isEmpty()) {
-                userRepository.save(new User(chatId, Language.EN, new HashSet<>()));
+                userRepository.save(new User(chatId, Language.EN));
             }
             execute(message);
             log.info("Reply sent");

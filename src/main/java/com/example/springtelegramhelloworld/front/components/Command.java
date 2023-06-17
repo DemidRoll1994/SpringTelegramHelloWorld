@@ -6,7 +6,6 @@ public enum Command {
     WEATHER("/weather", "Weather.textOnButton", "Weather.descriptionForHelp"),
     LANGUAGE ("/changeLanguage", "ChangeLanguage.textOnButton","ChangeLanguage.descriptionForHelp"),
     CHANGE_LANGUAGE_TO_RU ("/changeLanguageToRU", "ChangeLanguageToRu.textOnButton" , "ChangeLanguageToRu.descriptionForHelp"),
-
     CHANGE_LANGUAGE_TO_EN ("/changeLanguageToEN", "ChangeLanguageToEn.textOnButton" , "ChangeLanguageToEn.descriptionForHelp");
 
     private String incomeCommand;
