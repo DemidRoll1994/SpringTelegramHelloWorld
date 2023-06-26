@@ -1,6 +1,7 @@
 package com.example.springtelegramhelloworld.front.bot;
 
 import com.example.springtelegramhelloworld.front.components.*;
+import com.example.springtelegramhelloworld.front.components.commands.StartCommand;
 import com.example.springtelegramhelloworld.front.config.BotConfig;
 import com.example.springtelegramhelloworld.back.database.User;
 import com.example.springtelegramhelloworld.back.database.UserRepository;
@@ -8,7 +9,6 @@ import com.example.springtelegramhelloworld.back.repository.WeatherRepo;
 import com.example.springtelegramhelloworld.front.view.WeatherView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -17,7 +17,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.HashSet;
 import java.util.Optional;
 
 
@@ -65,7 +64,7 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
             chatId = update.getMessage().getChatId();
             if (userRepository.findById(chatId).isEmpty()) {
                 try {
-                    execute(commandExecutor.executeCommand(Command.START, new User(), update));
+                    execute(new StartCommand().prepareMessage(new User(), update));
                     log.info("Reply sent");
                 } catch (TelegramApiException e) {
                     log.error(e.getMessage());
@@ -81,7 +80,7 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
             chatId = update.getCallbackQuery().getMessage().getChatId();
             if (userRepository.findById(chatId).isEmpty()) {
                 try {
-                    execute(commandExecutor.executeCommand(Command.START, new User(), update));
+                    execute(new StartCommand().prepareMessage(new User(), update));
                     log.info("Reply sent");
                 } catch (TelegramApiException e) {
                     log.error(e.getMessage());
@@ -131,32 +130,32 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
 
     private void botAnswerUtils(String receivedMessage, User user, Update update) {
         log.info("receivedMessage is:" + receivedMessage);
-        Command command = Command.START;
+        /*Command222 command = Command222.START;
         switch (receivedMessage) {
             case "/start":
-                command = Command.START;
+                command = Command222.START;
                 if (user == null) {user = new User();}
                 break;
             case "/help":
-                command = Command.HELP;
+                command = Command222.HELP;
                 break;
             case "/weather":
-                command = Command.WEATHER;
+                command = Command222.WEATHER;
                 break;
             case "/changeLanguage":
-                command = Command.LANGUAGE;
+                command = Command222.LANGUAGE;
                 break;
             case "/changeLanguageToRU":
-                command = Command.CHANGE_LANGUAGE_TO_RU;
+                command = Command222.CHANGE_LANGUAGE_TO_RU;
                 break;
             case "/changeLanguageToEN":
-                command = Command.CHANGE_LANGUAGE_TO_EN;
+                command = Command222.CHANGE_LANGUAGE_TO_EN;
                 break;
             default:
                 break;
-        }
+        }*/
         try {
-            execute(commandExecutor.executeCommand(command, user, update));
+            execute(CommandExecutor.parseCommand(receivedMessage).prepareMessage(new User(), update));
             log.info("Reply sent");
         } catch (TelegramApiException e) {
             log.error(e.getMessage());
@@ -193,7 +192,7 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
         SendMessage message = new SendMessage();
         message.setChatId(user.getUserId());
         message.setText("select Language:");
-        message.setReplyMarkup(Buttons.selectLanguageButtons(user.getLanguage()));
+        message.setReplyMarkup(Buttons222.selectLanguageButtons(user.getLanguage()));
         try {
             execute(message);
             log.info("Reply sent");
@@ -208,7 +207,7 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
         message.setText(newLanguage.getValue() + " selected");
         user.setLanguage(newLanguage);
         userRepository.save(user);
-        message.setReplyMarkup(Buttons.mainMenuButtons(user.getLanguage()));
+        message.setReplyMarkup(Buttons222.mainMenuButtons(user.getLanguage()));
         try {
             execute(message);
             log.info(String.format("user %d change language to %s", user.getUserId(), newLanguage.getValue()));
@@ -221,7 +220,7 @@ public class CounterTelegramBot extends TelegramLongPollingBot implements BotCom
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText("Hi, " + userName + "! I'm a Telegram bot.'");
-        message.setReplyMarkup(Buttons.mainMenuButtons(Language.EN));
+        message.setReplyMarkup(Buttons222.mainMenuButtons(Language.EN));
         try {
             Optional<User> user = userRepository.findById(chatId);
             if (user.isEmpty()) {

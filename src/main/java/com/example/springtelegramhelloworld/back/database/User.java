@@ -40,10 +40,10 @@ public class User implements Serializable {
     Set<WeatherCity> weatherCities = new HashSet<>();
 
 
-    @OneToMany(mappedBy="exercise")
+    @OneToMany(mappedBy="user")
     private Set<Exercise> exercises;
 
-    @OneToMany(mappedBy="training")
+    @OneToMany(mappedBy="user")
     private Set<Training> trainings;
 
     public User() {

@@ -1,24 +1,13 @@
 package com.example.springtelegramhelloworld.front.components;
 
-import com.example.springtelegramhelloworld.back.database.User;
 import com.example.springtelegramhelloworld.back.database.UserRepository;
 import com.example.springtelegramhelloworld.back.repository.WeatherRepo;
+import com.example.springtelegramhelloworld.front.components.commands.*;
 import com.example.springtelegramhelloworld.front.view.WeatherView;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.language.bm.Lang;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.ResourceBundle;
 
 @Slf4j
 @Component
@@ -36,6 +25,23 @@ public class CommandExecutor {
         this.weatherRepo = weatherRepo;
     }
 
+    public static Command parseCommand(String receivedMessage) {
+        log.info("receivedMessage is:" + receivedMessage);
+        Command command = new StartCommand();
+        Command.class.getClasses();
+        switch (receivedMessage) {
+            case "/start"              -> command = new StartCommand();
+            case "/help"               -> command = new HelpCommand();
+            case "/weather"            -> command = new WeatherCommand();
+            case "/changeLanguage"     -> command = new LanguageCommand();
+            case "/changeLanguageToRU" -> command = new ChangeLangToRuCommand();
+            case "/changeLanguageToEN" -> command = new ChangeLangToEnCommand();
+        }
+        return command;
+    }
+
+
+    /*
     public SendMessage executeCommand(Command command, User user, Update update) {
         SendMessage message = null;
         switch (command) {
@@ -137,5 +143,5 @@ public class CommandExecutor {
         return message;
     }
 
-
+*/
 }

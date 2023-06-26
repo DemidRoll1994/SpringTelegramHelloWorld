@@ -1,6 +1,6 @@
 package com.example.springtelegramhelloworld.front.components;
 
-public enum Command {
+public enum Command222 {
     START("/start", "Start.textOnButton", "Start.descriptionForHelp"),
     HELP("/help", "Help.textOnButton", "Help.descriptionForHelp"),
     WEATHER("/weather", "Weather.textOnButton", "Weather.descriptionForHelp"),
@@ -12,7 +12,7 @@ public enum Command {
     private String textOnButton;
     private String descriptionForHelp;
 
-    Command(String incomeCommand, String textOnButton, String descriptionForHelp) {
+    Command222(String incomeCommand, String textOnButton, String descriptionForHelp) {
         this.incomeCommand = incomeCommand;
         this.textOnButton = textOnButton;
         this.descriptionForHelp = descriptionForHelp;

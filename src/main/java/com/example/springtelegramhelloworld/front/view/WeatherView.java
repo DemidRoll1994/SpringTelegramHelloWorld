@@ -1,7 +1,7 @@
 package com.example.springtelegramhelloworld.front.view;
 
 import com.example.springtelegramhelloworld.back.database.User;
-import com.example.springtelegramhelloworld.front.components.Buttons;
+import com.example.springtelegramhelloworld.front.bot.Buttons222;
 import com.example.springtelegramhelloworld.back.service.CurrentWeather;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -28,7 +28,7 @@ public class WeatherView {
                 , currentWeather.getCurrent().getPrecip_mm()
                 , currentWeather.getCurrent().getHumidity()
                 , currentWeather.getCurrent().getCloud()));
-        message.setReplyMarkup(Buttons.mainMenuButtons(user.getLanguage()));
+        message.setReplyMarkup(Buttons222.mainMenuButtons(user.getLanguage()));
 
 
         return message;

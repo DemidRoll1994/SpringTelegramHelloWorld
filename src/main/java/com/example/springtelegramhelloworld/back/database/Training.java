@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,23 +13,20 @@ import java.util.Set;
 @AllArgsConstructor
 public class Training {
 
-        @Id
-        private Long trainingId;
-        private String name;
-        private String description;
-        private Calendar dayOfWeek;
+    @Id
+    private Long trainingId;
+    private String name;
+    private String description;
+    private Calendar dayOfWeek;
 
-        @OneToMany(mappedBy="exercise")
-        private Set<Exercise> exercises;
+    @OneToMany(mappedBy = "training")
+    private Set<Exercise> exercises;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-        @ManyToOne
-        @JoinColumn(name="user_id", nullable=false)
-        private User user;
-
-        public Training(){
-        }
-
-
+    public Training() {
     }
 
+}
